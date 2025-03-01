@@ -7,7 +7,7 @@ import authRoutes from "./routes/auth.routes";
 import customerRoutes from "./routes/customer.routes";
 import productRoutes from "./routes/product.routes";
 import orderRoutes from "./routes/order.routes";
-import dashboardRoutes from "./routes/dashboard.routes"; // ✅ Added Dashboard Route
+import dashboardRoutes from "./routes/dashboard.routes"; // ✅ Dashboard Route Included
 import { errorHandler } from "./middleware/errorHandler";
 
 dotenv.config();
@@ -25,15 +25,12 @@ app.use("/api/auth", authRoutes);
 app.use("/api/customers", customerRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
-app.use("/api/dashboard", dashboardRoutes); // ✅ Added Dashboard Insights API
+app.use("/api/dashboard", dashboardRoutes); // ✅ Dashboard Insights API
 
-// ✅ Health check route
+// ✅ Health Check Route
 app.get("/", (req: Request, res: Response) => {
   res.json({ message: "API running!" });
 });
-
-// ✅ Middleware to handle JSON parsing errors
-app.use(errorHandler);
 
 // ✅ Global Error Handler Middleware
 app.use(errorHandler);

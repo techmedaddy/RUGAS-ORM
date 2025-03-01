@@ -10,19 +10,19 @@ router.get("/", async (req, res) => {
 
     // ✅ Corrected revenue aggregation query
     const totalRevenue = await prisma.order.aggregate({
-      sum: { price: true }, // ✅ Changed `productPrice` to `price`
+      _sum: { price: true }, // ✅ Ensuring `_sum` is correctly used in Prisma
     });
 
     const recentOrders = await prisma.order.findMany({
       take: 5,
-      orderBy: { orderDate: "desc" }, // ✅ Ensure `orderDate` exists in schema
+      orderBy: { createdAt: "desc" }, // ✅ Changed `orderDate` to `createdAt` to match Prisma schema
       include: { product: true },
     });
 
     res.json({
       totalProducts,
       totalOrders,
-      totalRevenue: totalRevenue.sum?.price || 0, // ✅ Fixed reference
+      totalRevenue: totalRevenue._sum?.price || 0, // ✅ Fixed reference
       recentOrders,
     });
   } catch (error) {
