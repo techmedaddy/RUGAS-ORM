@@ -14,9 +14,16 @@ export default function Products() {
 
   useEffect(() => {
     async function fetchProducts() {
-      const response = await fetch("/api/products");
-      const data = await response.json();
-      setProducts(data);
+      try {
+        const response = await fetch("/api/products");
+        if (!response.ok) {
+          throw new Error("Failed to fetch products");
+        }
+        const data = await response.json();
+        setProducts(data);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
     }
     fetchProducts();
   }, []);
@@ -32,9 +39,34 @@ export default function Products() {
 
     if (response.ok) {
       alert("Product added successfully!");
+      setName("");
+      setCategory("");
+      setDescription("");
+      setImageUrl("");
+      setPrice("");
       router.refresh(); // Refresh the page to see the new product
     } else {
       alert("Failed to add product.");
+    }
+  };
+
+  const handleBuyNow = async (productId: string) => {
+    try {
+      const response = await fetch("/api/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ productId }),
+      });
+
+      if (response.ok) {
+        alert("Order placed successfully!");
+        router.push("/orders");
+      } else {
+        alert("Failed to place order.");
+      }
+    } catch (error) {
+      console.error("Error placing order:", error);
+      alert("Something went wrong!");
     }
   };
 
@@ -54,24 +86,28 @@ export default function Products() {
 
       {/* Product List */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {products.map((product) => (
-          <div key={product.id} className="bg-gray-900 text-white p-4 rounded-lg shadow-md">
-            <img src={product.imageUrl} alt={product.name} className="w-full h-40 object-cover rounded-md" />
-            <h2 className="text-lg font-semibold mt-2">{product.name}</h2>
-            <p className="text-sm text-gray-400">{product.category}</p>
-            <p className="text-sm">{product.description}</p>
-            <p className="text-lg font-bold mt-2">${product.price}</p>
-            <div className="flex gap-3 mt-3">
-              <button className="bg-green-500 px-4 py-2 rounded text-white">Add to Cart</button>
-              <button
-                className="bg-blue-500 px-4 py-2 rounded text-white"
-                onClick={() => handleBuyNow(product.id)}
-              >
-                Buy Now
-              </button>
+        {products.length === 0 ? (
+          <p className="text-center text-gray-500">No products available.</p>
+        ) : (
+          products.map((product: any) => (
+            <div key={product.id} className="bg-gray-900 text-white p-4 rounded-lg shadow-md">
+              <img src={product.imageUrl} alt={product.name} className="w-full h-40 object-cover rounded-md" />
+              <h2 className="text-lg font-semibold mt-2">{product.name}</h2>
+              <p className="text-sm text-gray-400">{product.category}</p>
+              <p className="text-sm">{product.description}</p>
+              <p className="text-lg font-bold mt-2">${product.price}</p>
+              <div className="flex gap-3 mt-3">
+                <button className="bg-green-500 px-4 py-2 rounded text-white">Add to Cart</button>
+                <button
+                  className="bg-blue-500 px-4 py-2 rounded text-white"
+                  onClick={() => handleBuyNow(product.id)} // ✅ Fixed Issue
+                >
+                  Buy Now
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
     </div>
   );
