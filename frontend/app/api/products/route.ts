@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import prisma from "../../../lib/prisma"; // Make sure Prisma is correctly configured
+import prisma from "@/lib/prisma"; // ✅ Uses absolute path
+
 
 export async function POST(req: Request) {
   try {
