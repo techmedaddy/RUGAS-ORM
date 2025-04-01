@@ -9,6 +9,11 @@ The backend is built with Node.js, Express.js, and a database, while the fronten
 ![WhatsApp Image 2025-03-01 at 15 44 28_76b59ecb](https://github.com/user-attachments/assets/9560b532-558a-4cbd-b13f-9c91a6c2d965)
 
 
+## 🛠️🖥️ System Design 
+![WhatsApp Image 2025-04-01 at 14 08 32_139ecc43](https://github.com/user-attachments/assets/dce1c486-4fee-40c4-a215-9da7d2f8d09e)
+
+
+
 ### Tech Stack
 
 **Frontend:**
